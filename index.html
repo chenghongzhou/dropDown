@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1,minimum-scale=1,user-scalable=no">
+    <title>下拉刷新</title>
+    <script src="load.js"></script>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+        }
+        .main{
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        /*必须的css*/
+        .box{
+            width: 100%;
+            height:auto;
+            transform: translate3d(0px, 0px, 0px); 
+            transition-duration: 0ms;
+            transition: all 0.5s;
+            box-sizing: border-box;
+        }
+        .cz-load-icon{
+            width: 100%;
+            text-align: center;
+            font-size: 12px;
+            color: #cccccc;
+            position: absolute;
+            top: 0%;
+            left: 50%;
+            transform: translate(-50%,0%);
+            transition: all 1s;
+            display: none;
+        }
+        .cz-load-icon img{
+            width: 20px;
+            height: 20px;
+            vertical-align: middle;
+            margin-right: 5px;
+        }
+        /*必须的css*/
+        .box,.box ul{
+            width: 100%;
+            height: auto;
+        }
+        .box ul li{
+            font-size: 15px;
+            color: #cccccc;
+            text-align: center;
+            font-weight: 600;
+            width: 100%;
+            height: 50px;
+            line-height: 50px;
+            border-bottom: 1px solid #cccccc;
+        }
+        ul,li{
+            list-style: none;
+        }
+    </style>
+  </head>
+  <body>
+    <div class="main">
+        <div class="cz-load-icon chzIcon"><img src="https://tools.dianliaoapp.com/test/test-2019-09-23-9146.gif" alt="">松开刷新</div>
+        <div class="box" id="box">
+            <ul>
+                <li>是的发个是的</li>
+            </ul>
+        </div>
+   </div>
+  </body>
+</html>
+
+<script>
+
+
+    window.onload = function(){
+        getData();
+        //下拉刷新的调用
+        var load = new chzDropDown();
+        load.init({
+            loadHeight: '100',   //下拉距离
+            box: '.box',  //需要下移的块
+            'chzEnd': function(){
+                getData();
+            }
+        })
+    };
+    //创建xhr请求
+    function createXHR(){
+        if(typeof XMLHttpRequest != "undefined"){
+            return new XMLHttpRequest();
+        }else{
+            return new ActiveXObject();
+        }
+    }
+    function getData(){
+        var url = "/loadUp/data.json";
+        var xhr = createXHR();
+        document.getElementById('box').innerHTML = '';
+        xhr.open("GET", url, true);
+        xhr.send(null);
+        xhr.onreadystatechange = function(){
+            if(xhr.readyState==4 && xhr.status==200){
+                var parmas = JSON.parse(xhr.responseText);
+                console.log(parmas);
+                var html = '<ul>'
+                for(var i = 0;i<parmas.data.length;i++){
+                    html+= '<li>'+parmas.data[i].text+'</li>'
+                };
+                html+='</ul>';
+                document.getElementById('box').innerHTML = html;
+            };
+        }
+    }
+</script>
