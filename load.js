@@ -1,5 +1,5 @@
 /*
-    var load = new chzLoad();
+    var load = new chzDropDown();
     load.init({
         loadHeight: '100',
         box: '.box1',
@@ -33,10 +33,8 @@ window.chzDropDown = (function() {
                 var moveY = parseInt(ev.targetTouches[0].clientY - _self.startY);   //下拉的距离
                 if(moveY >= _self.loadHeight){
                     moveY = _self.loadHeight;
-                    setTimeout(function(){
-                        _self.chzIcon.style.display='block';
-                        _self.chzIcon.style.top = moveY/2+'px';
-                    },100);
+                    _self.chzIcon.style.display='block';
+                    _self.chzIcon.style.top = moveY/2+'px';
                 }else{
                     moveY = moveY;
                 };
@@ -47,14 +45,14 @@ window.chzDropDown = (function() {
                 var endY = parseInt(ev.changedTouches[0].clientY - _self.startY);
               //  if(!endY)return false;
                 if(endY > _self.loadHeight){
-                    setTimeout(function(){
-                        //作为接口的请求
-                        _self.chzEnd();
-                    },500);
+                    //作为接口的请求
+                    _self.chzEnd();
                 };
-                _self.chzIcon.style.top = '0px';
-                _self.chzIcon.style.display='none';
-                _self.chzContent.style.transform = 'translate3d(0px, 0px, 0px)';
+               setTimeout(() => {
+                    _self.chzIcon.style.top = '0px';
+                    _self.chzIcon.style.display='none';
+                    _self.chzContent.style.transform = 'translate3d(0px, 0px, 0px)';
+               }, 1000);
             });
         }
     };
